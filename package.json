@@ -1,0 +1,8 @@
+{
+  "name": "whatsapp-price-bot",
+  "version": "2.0.0",
+  "main": "index.js",
+  "scripts": { "start": "node index.js" },
+  "engines": { "node": ">=18" },
+  "dependencies": { "dotenv": "^16.4.5", "express": "^4.21.0" }
+}

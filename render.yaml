@@ -1,0 +1,25 @@
+# Render Blueprint: Render → New → Blueprint → pick this repo.
+# Values marked "sync: false" are asked for during setup.
+services:
+  - type: web
+    name: whatsapp-price-bot
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: PROVIDER
+        value: dualhook
+      - key: SHEET_ID
+        value: 1UJkK_eCECQVSPaGjyv8OGeXEKIzYEF9ljduX1_NalCI
+      - key: SHEET_TAB
+        value: Prices
+      - key: SHOP_NAME
+        sync: false
+      - key: VERIFY_TOKEN
+        sync: false
+      - key: PHONE_NUMBER_ID
+        sync: false
+      - key: DUALHOOK_KEY
+        sync: false
