@@ -127,10 +127,13 @@ function validSignature(req) {
   return sig.length === expected.length && crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected));
 }
 
+// Accepts true / TRUE / yes / on / 1, ignoring spaces or quotes typed by mistake
+const isPaused = () => /^(true|yes|on|1)$/i.test(String(process.env.PAUSED || "").replace(/["'\s]/g, ""));
+
 const seen = new Set(); // Meta sometimes delivers the same message twice
 
 async function handleMessage(msg) {
-  if (process.env.PAUSED === "true") return; // pause switch: set PAUSED=true on Render
+  if (isPaused()) return console.log("Paused - not replying to", msg.from); // pause switch: PAUSED=true on Render
   if (msg.type !== "text" || seen.has(msg.id)) return;
   seen.add(msg.id);
   if (seen.size > 1000) seen.clear();
@@ -188,6 +191,6 @@ async function registerWebhook() {
 }
 
 app.listen(PORT, () => {
-  console.log(`Listening on ${PORT}`);
+  console.log(`Listening on ${PORT} | PAUSED=${JSON.stringify(process.env.PAUSED)} -> ${isPaused() ? "PAUSED" : "ACTIVE"}`);
   registerWebhook();
 });
