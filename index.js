@@ -23,7 +23,7 @@ const {
 
 const GRAPH = "https://graph.facebook.com/v25.0";
 const DUALHOOK = "https://api.dualhook.com/v25.0";
-const CACHE_MS = 5 * 60 * 1000; // re-read the sheet at most every 5 minutes
+const CACHE_MS = 60 * 1000; // re-read the sheet at most every 1 minute
 
 const app = express();
 app.use(express.json({ verify: (req, _res, buf) => (req.rawBody = buf) }));
@@ -130,6 +130,7 @@ function validSignature(req) {
 const seen = new Set(); // Meta sometimes delivers the same message twice
 
 async function handleMessage(msg) {
+  if (process.env.PAUSED === "true") return; // pause switch: set PAUSED=true on Render
   if (msg.type !== "text" || seen.has(msg.id)) return;
   seen.add(msg.id);
   if (seen.size > 1000) seen.clear();
